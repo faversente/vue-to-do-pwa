@@ -42,7 +42,7 @@
       <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn @click="refresh" :disabled="refreshDisabled" icon>
         <v-icon>refresh</v-icon>
       </v-btn>
     </v-toolbar>
@@ -62,7 +62,16 @@ export default {
       //   icon: 'edit',
       //   title: 'To do'
       // }],
-      title: 'TwoDigits - ToDo'
+      title: 'TwoDigits - ToDo',
+      refreshDisabled: false
+    }
+  },
+
+  methods: {
+    async refresh () {
+      this.refreshDisabled = true
+      await this.$store.dispatch('fetchTodos')
+      this.refreshDisabled = false
     }
   }
 }
