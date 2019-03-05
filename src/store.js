@@ -38,8 +38,8 @@ export default new Vuex.Store({
     },
 
     deleteTodo: async ({ commit }, id) => {
-      await api.deleteTodo(id)
       commit('removeTodo', id)
+      await api.deleteTodo(id)
     }
   }
 })
