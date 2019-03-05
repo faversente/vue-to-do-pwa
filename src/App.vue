@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="drawer"
       app
     >
@@ -27,12 +27,24 @@
             <v-list-tile-title v-text="item.title"></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-divider :key="`divider-${i}`"></v-divider>
       </v-list>
-    </v-navigation-drawer>
+      <v-list-tile>
+        <v-list-tile-action>
+            <v-icon v-html="add"></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Add a new todo list..</v-list-tile-title>
+          </v-list-tile-content>
+      </v-list-tile>
+    </v-navigation-drawer>-->
     <v-toolbar app>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>refresh</v-icon>
+      </v-btn>
     </v-toolbar>
     <v-content>
       <router-view/>
@@ -42,16 +54,16 @@
 
 <script>
 export default {
-  data () {
+  name: 'App',
+  data: () => {
     return {
-      drawer: true,
-      items: [{
-        icon: 'edit',
-        title: 'To do'
-      }],
+      // drawer: true,
+      // items: [{
+      //   icon: 'edit',
+      //   title: 'To do'
+      // }],
       title: 'TwoDigits - ToDo'
     }
-  },
-  name: 'App'
+  }
 }
 </script>
