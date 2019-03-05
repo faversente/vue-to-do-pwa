@@ -3,6 +3,8 @@
     <v-text-field outline clearable v-model="todo" label="Todo..." @keydown.enter="create">
       <v-fade-transition slot="append">
         <v-progress-circular v-if="loading" color="info" size="24" indeterminate></v-progress-circular>
+      </v-fade-transition>
+      <v-fade-transition slot="append">
         <v-icon v-if="todo" @click="create">add_circle</v-icon>
       </v-fade-transition>
     </v-text-field>
@@ -20,33 +22,29 @@
     <v-divider class="mb-3"></v-divider>
 
     <v-card v-if="todos.length > 0">
-      <v-slide-y-transition class="py-0" group>
-        <template v-for="(todo, i) in todos">
-          <v-divider v-if="i !== 0" :key="`${i}-divider`"></v-divider>
+      <template v-for="(todo, i) in todos">
+        <v-divider v-if="i !== 0" :key="`${i}-divider`"></v-divider>
 
-          <v-list-tile :key="`${i}-${todo.title}`">
-            <v-list-tile-action>
-              <v-checkbox v-model="todo.done" @change="updateTodo(todo)" color="info darken-3">
-                <div
-                  slot="label"
-                  :class="todo.done && 'gray--text' && 'is-selected' || 'text--primary'"
-                  class="ml-3"
-                  v-text="todo.title"
-                ></div>
-              </v-checkbox>
-            </v-list-tile-action>
+        <v-list-tile :key="`${i}-${todo.title}`">
+          <v-list-tile-action>
+            <v-checkbox v-model="todo.done" @change="updateTodo(todo)" color="info darken-3">
+              <div
+                slot="label"
+                :class="todo.done && 'gray--text' && 'is-selected' || 'text--primary'"
+                class="ml-3"
+                v-text="todo.title"
+              ></div>
+            </v-checkbox>
+          </v-list-tile-action>
 
-            <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
 
-            <v-scroll-x-transition>
-              <v-icon v-if="todo.done" color="success">check</v-icon>
-            </v-scroll-x-transition>
-            <v-scroll-x-transition>
-              <v-icon @click="deleteTodo(todo.id)" color="gray">delete</v-icon>
-            </v-scroll-x-transition>
-          </v-list-tile>
+          <v-scroll-x-transition>
+            <v-icon v-if="todo.done" color="success">check</v-icon>
+          </v-scroll-x-transition>
+          <v-icon @click="deleteTodo(todo.id)" color="gray">delete</v-icon>
+        </v-list-tile>
         </template>
-      </v-slide-y-transition>
     </v-card>
   </v-container>
 </template>
