@@ -12,11 +12,11 @@
     <v-divider class="mt-3"></v-divider>
 
     <v-layout my-1 align-center>
+      <v-progress-circular :value="progress" class="mr-2"></v-progress-circular>
+      <v-spacer></v-spacer>
       <strong class="mx-3 info--text text--darken-3">Remaining: {{ remainingTodos }}</strong>
       <v-divider vertical></v-divider>
-      <strong class="mx-3 red--text">Completed: {{ completedTodos }}</strong>
-      <v-spacer></v-spacer>
-      <v-progress-circular :value="progress" class="mr-2"></v-progress-circular>
+      <strong class="mx-3 green--text">Completed: {{ completedTodos }}</strong>
     </v-layout>
 
     <v-divider class="mb-3"></v-divider>
@@ -25,26 +25,45 @@
       <template v-for="(todo, i) in todos">
         <v-divider v-if="i !== 0" :key="`${i}-divider`"></v-divider>
 
-        <v-list-tile :key="`${i}-${todo.title}`">
+        <v-list-tile :key="`${i}`">
           <v-list-tile-action>
-            <v-checkbox v-model="todo.done" @change="updateTodo(todo)" color="info darken-3">
-              <div
-                slot="label"
-                :class="todo.done && 'gray--text' && 'is-selected' || 'text--primary'"
-                class="ml-3"
-                v-text="todo.title"
-              ></div>
-            </v-checkbox>
+            <v-checkbox v-model="todo.done" @change="updateTodo(todo)" color="info darken-3"></v-checkbox>
           </v-list-tile-action>
-
+          <v-list-tile-content>
+            <v-edit-dialog
+              class="text-xs-right"
+              @save="updateTodo(todo)"
+              :return-value.sync="todo.title"
+              large
+              lazy
+            >
+              <div
+                :class="todo.done && 'gray--text' && 'is-selected' || 'text--primary'"
+                class="text-xs-right"
+              >{{ todo.title }}</div>
+              <div slot="input" class="mt-3 title">Update TODO</div>
+              <v-text-field
+                slot="input"
+                label="Title"
+                v-model="todo.title"
+                :rules="[rules.required]"
+                single-line
+              ></v-text-field>
+              <v-text-field
+                slot="input"
+                label="Description"
+                v-model="todo.description"
+                single-line
+              ></v-text-field>
+            </v-edit-dialog>
+          </v-list-tile-content>
           <v-spacer></v-spacer>
-
           <v-scroll-x-transition>
             <v-icon v-if="todo.done" color="success">check</v-icon>
           </v-scroll-x-transition>
-          <v-icon @click="deleteTodo(todo.id)" color="gray">delete</v-icon>
+          <v-icon @click="deleteTodo(todo.id)" color="red">delete</v-icon>
         </v-list-tile>
-        </template>
+      </template>
     </v-card>
   </v-container>
 </template>
@@ -55,6 +74,9 @@
 export default {
   name: 'home',
   data: () => ({
+    rules: {
+      required: value => !!value || 'Required.'
+    },
     loading: false,
     todo: null
   }),
@@ -91,6 +113,10 @@ export default {
     },
 
     async updateTodo (todo) {
+      delete todo._title
+      if (!todo.title || todo.title === '') {
+        return
+      }
       await this.$store.dispatch('updateTodo', todo)
     },
 
